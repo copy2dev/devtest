@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบลงเวลาทำงาน</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(to bottom, #1e90ff, #87cefa);
+            color: #333;
+        }
+        .container {
+            width: 350px;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            padding: 30px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .time-display {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #1e90ff;
+        }
+        label {
+            display: block;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: #555;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        button {
+            padding: 12px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            color: white;
+        }
+        button.submit {
+            background-color: #4caf50;
+        }
+        button.back {
+            background-color: #ff5722;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="time-display" id="time">08:15 AM</div>
+        <label for="employee-id">กรอกรหัสพนักงาน (6 หลัก)</label>
+        <input type="text" id="employee-id" placeholder="รหัสพนักงาน" maxlength="6">
+        <div class="buttons">
+            <button class="submit" onclick="submitTime()">ลงเวลา</button>
+            <button class="back" onclick="resetAll()">ย้อนกลับ</button>
+        </div>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        // ฟังก์ชันอัปเดตเวลาปัจจุบัน
+        function updateTime() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} ${
+                hours >= 12 ? 'PM' : 'AM'
+            }`;
+            document.getElementById('time').textContent = formattedTime;
+        }
+        setInterval(updateTime, 1000);
+
+        // ฟังก์ชันลงเวลา
+        function submitTime() {
+            const employeeId = document.getElementById('employee-id').value;
+            const currentTime = document.getElementById('time').textContent;
+            const resultDiv = document.getElementById('result');
+
+            // ตรวจสอบว่ากรอกได้เฉพาะตัวเลขและต้องมี 6 หลัก
+            const isValidId = /^[0-9]{6}$/.test(employeeId);
+
+            if (isValidId) {
+                resultDiv.textContent = `รหัสพนักงาน: ${employeeId} ลงเวลา: ${currentTime}`;
+            } else {
+                alert('รหัสพนักงานไม่ถูกต้อง! กรุณากรอกตัวเลข 6 หลัก');
+                resultDiv.textContent = ''; // เคลียร์ผลลัพธ์เดิม
+            }
+        }
+
+        // ฟังก์ชันรีเซ็ตค่า
+        function resetAll() {
+            document.getElementById('employee-id').value = ""; // รีเซ็ตช่องกรอกข้อมูล
+            document.getElementById('result').textContent = ""; // ล้างผลลัพธ์
+        }
+
+        // เริ่มต้นอัปเดตเวลา
+        updateTime();
+    </script>
+</body>
+</html>
